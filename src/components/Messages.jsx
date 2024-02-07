@@ -36,7 +36,7 @@ function Messages() {
     );
 
     return (
-        <div>
+        <div className={`${isLoading && 'opacity-30 pointer-events-none'}`}>
             <div className="fixed right-[100px] top-[150px]">
                 <div className="flex flex-col justify-center items-center space-y-3">
                     <span>Page: {page}</span>
