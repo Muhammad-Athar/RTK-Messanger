@@ -4,11 +4,6 @@ export const messageServices = createApi({
     reducerPath: "messages",
     baseQuery: fetchBaseQuery({
         baseUrl: "http://149.56.68.156:6060/api/chats?",
-        prepareHeaders: (headers, { getState }) => {
-            const message = getState().messages.message;
-            headers.set("message", message);
-            return headers;
-        },
     }),
     endpoints: (builder) => ({
         getMessages: builder.query({
