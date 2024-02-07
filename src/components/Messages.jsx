@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGetMessagesQuery } from "../services/messageService";
 
 import Loader from "../ui/Loader";
@@ -8,11 +8,32 @@ import MessageSender from "./MessageSender";
 function Messages() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(5);
+    const [messages, setMessages] = useState([]);
+
+    const ref = useRef(null);
 
     const { data, isError, isLoading } = useGetMessagesQuery({
         page,
         pageSize,
     });
+
+    const scrollToBottom = () => {
+        ref.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(
+        function () {
+            if (data?.messages) setMessages([...data.messages].reverse());
+        },
+        [data?.messages]
+    );
+
+    useEffect(
+        function () {
+            scrollToBottom();
+        },
+        [messages]
+    );
 
     return (
         <div>
@@ -77,7 +98,7 @@ function Messages() {
                     </button>
                 </div>
             ) : (
-                data.messages.map((message) => (
+                messages.map((message) => (
                     <DisplayMessages
                         key={message._id}
                         text={message.text}
@@ -87,6 +108,7 @@ function Messages() {
             )}
 
             <MessageSender />
+            <span ref={ref} />
         </div>
     );
 }
